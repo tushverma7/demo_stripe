@@ -23,7 +23,8 @@ jobs:
     - name: Run app (verification)
       env:
         STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        PORT: 5050
       run: |
         node server.js &
         sleep 5
-        curl http://localhost:4242
+        curl http://localhost:5050
