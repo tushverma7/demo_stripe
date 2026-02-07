@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Demokart</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .product {
+      background: white;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      width: 200px;
+    }
+    button {
+      padding: 5px 10px;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🛒 Demokart</h1>
+
+<h2>Products</h2>
+
+<div class="product">
+  T-Shirt – ₹1000 <br>
+  <button onclick="addToCart('T-Shirt', 1000)">Add</button>
+</div>
+
+<div class="product">
+  Shoes – ₹2500 <br>
+  <button onclick="addToCart('Shoes', 2500)">Add</button>
+</div>
+
+<div class="product">
+  Watch – ₹4000 <br>
+  <button onclick="addToCart('Watch', 4000)">Add</button>
+</div>
+
+<div class="product">
+  Bag – ₹1800 <br>
+  <button onclick="addToCart('Bag', 1800)">Add</button>
+</div>
+
+<hr>
+
+<h2>🛒 Cart (<span id="cartCount">0</span>)</h2>
+<ul id="cart"></ul>
+
+<button onclick="checkout()">Proceed to Payment</button>
+
+<script>
+  let cart = [];
+
+  function addToCart(name, price) {
+    cart.push({ name, price });
+    renderCart();
+  }
+
+  function removeItem(index) {
+    cart.splice(index, 1);
+    renderCart();
+  }
+
+  function renderCart() {
+    const cartList = document.getElementById('cart');
+    const cartCount = document.getElementById('cartCount');
+    cartList.innerHTML = '';
+    cartCount.innerText = cart.length;
+
+    cart.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `${item.name} - ₹${item.price}
+        <button onclick="removeItem(${index})">❌</button>`;
+      cartList.appendChild(li);
+    });
+  }
+
+  async function checkout() {
+    if (cart.length === 0) {
+      alert("Cart is empty");
+      return;
+    }
+
+    const response = await fetch('/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cart })
+    });
+
+    const data = await response.json();
+    window.location.href = data.url;
+  }
+</script>
+
+</body>
+</html>
