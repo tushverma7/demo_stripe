@@ -37,5 +37,5 @@ jobs:
        
     - name: Verify app is reachable
       run: |
-       curl -v http://localhost:5050 || echo "Curl failed"
+       curl -i http://localhost:5050 || echo "Curl failed"
 
