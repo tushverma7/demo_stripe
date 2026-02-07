@@ -25,6 +25,17 @@ jobs:
         STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
         PORT: 5050
       run: |
-        node server.js &
-        sleep 5
-        curl http://localhost:5050
+        echo "Starting Demokart..."
+        node server.js > server.log 2>&1 &
+        sleep 10
+        echo "Checking server logs:"
+        cat server.log   
+        
+    - name: Check port 5050
+      run: |
+       sudo lsof -i :5050 || echo "Port 5050 not listening"
+       
+    - name: Verify app is reachable
+      run: |
+       curl -v http://localhost:5050 || echo "Curl failed"
+
