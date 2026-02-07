@@ -22,7 +22,7 @@ app.post('/create-checkout-session', async (req, res) => {
       })),
       mode: 'payment',
       success_url: 'http://localhost:4242/success.html',
-      cancel_url: 'http://localhost:4242/cancel.html'
+      cancel_url: 'http://localhost:4242/failure.html'
     });
 
     res.json({ url: session.url });
@@ -31,6 +31,8 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-app.listen(4242, () => {
-  console.log('Demokart running on http://localhost:4242');
+const PORT = process.env.PORT || 4242;
+
+app.listen(PORT, () => {
+  console.log(`Demokart running on http://localhost:${PORT}`);
 });
